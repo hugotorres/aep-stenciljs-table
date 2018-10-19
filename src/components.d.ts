@@ -13,10 +13,10 @@ import '@stencil/core';
 export namespace Components {
 
   interface AepTable {
-    'issetPagination': true;
+    'properties': any;
   }
   interface AepTableAttributes extends StencilHTMLAttributes {
-    'issetPagination'?: true;
+    'properties'?: any;
   }
 
   interface MyComponent {

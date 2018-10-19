@@ -1,6 +1,5 @@
 import { Component, Prop } from '@stencil/core';
 import 'https://unpkg.com/ag-grid-community@19.0.0/dist/ag-grid-community.min.js';
-
 @Component({
     tag: 'aep-table',
     styleUrl: 'aep-table.css',
@@ -8,7 +7,7 @@ import 'https://unpkg.com/ag-grid-community@19.0.0/dist/ag-grid-community.min.js
 })
 export class AepTable {
     content: null;
-    @Prop() issetPagination: true;
+    @Prop() properties;
     renewTypeClassRules = {
         'current-price': 'x=="current-price"',
         'current-term': 'x=="current-term"',
@@ -17,261 +16,99 @@ export class AepTable {
         'renew': 'x=="renew"',
         'revised': 'x=="revised"'
     };
+    checkboxRenderer = function (params) {
+        return `<label class="container"><input type='checkbox' ${params.value == 'Y' ? 'checked' : ''} /><span class="checkmark"></span></label>`;
+    }
     renewTypeRenderer = function (params) {
-        // console.log(params.value.toLocaleString());
         return '<i class="icon-' + params.value + '"></i>';
     }
     gridOptions = {
-        /*  rowData: [
-              {
-                  "term": "3",
-                  "primary_auto_renew_type": "current-price",
-                  "secondary_auto_renew_type": "auto_renew",
-                  "utility": "COLUMBIA_OH",
-                  "previous_price": "8.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 7.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "10.00",
-                  "cop": "78.888",
-                  "web_aq": true,
-                  "web_rl": true,
-                  "ibtm_aq": true,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2894
-              }, {
-                  "term": "6",
-                  "primary_auto_renew_type": "current-term",
-                  "secondary_auto_renew_type": "auto_renew",
-                  "utility": "WEST_PENN_POWER",
-                  "previous_price": "8.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 7.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "10.00",
-                  "cop": "78.888",
-                  "web_aq": true,
-                  "web_rl": true,
-                  "ibtm_aq": true,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2895
-              }, {
-                  "term": "12",
-                  "primary_auto_renew_type": "monthly",
-                  "secondary_auto_renew_type": "auto_renew",
-                  "utility": "POTOMAC_EDISON",
-                  "previous_price": "8.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 7.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "10.00",
-                  "cop": "78.888",
-                  "web_aq": true,
-                  "web_rl": true,
-                  "ibtm_aq": true,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2896
-              }, {
-                  "term": "24",
-                  "primary_auto_renew_type": "no-renew",
-                  "secondary_auto_renew_type": "auto_renew",
-                  "utility": "DELMARVA_DE",
-                  "previous_price": "8.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 7.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "10.00",
-                  "cop": "78.888",
-                  "web_aq": true,
-                  "web_rl": true,
-                  "ibtm_aq": true,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2897
-              }, {
-                  "term": "12",
-                  "primary_auto_renew_type": "renew",
-                  "secondary_auto_renew_type": "auto_renew",
-                  "utility": "DELMARVA_DE",
-                  "previous_price": "8.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 7.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "10.00",
-                  "cop": "78.888",
-                  "web_aq": true,
-                  "web_rl": true,
-                  "ibtm_aq": true,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2898
-              }, {
-                  "term": "12",
-                  "primary_auto_renew_type": "revised",
-                  "secondary_auto_renew_type": "renew",
-                  "utility": "DELMARVA_DE",
-                  "previous_price": "6.00",
-                  "basic_services_proces": "7.88",
-                  "basic_services_process_to": "8.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 8.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "20.00",
-                  "cop": "28.888",
-                  "web_aq": false,
-                  "web_rl": false,
-                  "ibtm_aq": false,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2899
-              }, {
-                  "term": "6",
-                  "primary_auto_renew_type": "revised",
-                  "secondary_auto_renew_type": "renew",
-                  "utility": "DELMARVA_DE",
-                  "previous_price": "7.00",
-                  "basic_services_proces": "8.88",
-                  "basic_services_process_to": "9.88",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 8.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "20.00",
-                  "cop": "28.888",
-                  "web_aq": false,
-                  "web_rl": false,
-                  "ibtm_aq": false,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2900
-              }, {
-                  "term": "12",
-                  "primary_auto_renew_type": "renew",
-                  "secondary_auto_renew_type": "renew",
-                  "utility": "DELMARVA_DE",
-                  "previous_price": "6.70",
-                  "basic_services_proces": "7.98",
-                  "basic_services_process_to": "8.89",
-                  "schedule": "24 Month - G- HC -$120",
-                  "price": 8.79,
-                  "rate_code": "ACBD12",
-                  "etf": "No-ETF",
-                  "cancelation-type": "No term fee",
-                  "margin": "20.00",
-                  "cop": "28.848",
-                  "web_aq": false,
-                  "web_rl": false,
-                  "ibtm_aq": false,
-                  "ibtm_rl": true,
-                  "ibtm_rt": true,
-                  "id": 2901
-              }],
-              */
+        rowSelection: 'multiple',
         rowData: this.content,
         enableSorting: true,
         enableFilter: false,
         suppressMenuHide: true,
+        enableColResize: false,
+        paginationPageSize: 10,
+        pagination: true,
+        domLayout: 'autoHeight',
+        headerHeight: 36,
+        groupHeaderHeight: 36,
 
-        enableColResize: true,
         defaultColDef: {
-            enableColResize: true,
+            enableColResize: false,
             editable: true,
             autoHeight: true,
             suppressMenu: true,
-        }, pagination: true,
-        paginationPageSize: 10,
-
-        //  domLayout: 'autoHeight',
+        },
         //getRowModelClass:function(){return 'rowclass'},
         onGridReady: function () {
-            // console.log(this.pagination);
-            // params.api.sizeColumnsToFit();
-            //  this.gridOptions.api.sizeColumnsToFit();
-            // this.gridOptions['api'].setRowData(this.content);
+            console.log(this.properties);
         },
         columnDefs: [
             {
                 headerName: '', children: [
-                    { headerName: '', checkboxSelection: true, width: 60 },
-                    { headerName: 'Term', field: 'term.netTerm', autoHeight: true, width: 100 },
+                    { headerName: '', checkboxSelection: true, width: 55, pinned: 'left', cellClass: 'checkbox-cell' },
+                    { headerName: 'Term', field: 'term.netTerm', autoHeight: true, width: 100, headerClass: 'header-center' },
                     {
-                        headerName: 'Primary Auto Renew type', field: 'primaryAuto', cellClassRules: this.renewTypeClassRules, cellRenderer: this.renewTypeRenderer, autoHeight: true, filter: 'agSetColumnFilter',
+                        headerName: 'Primary Auto Renew type', 
+                        field: 'primaryAuto',
+                        cellClassRules: this.renewTypeClassRules,
+                        cellRenderer: this.renewTypeRenderer,
+                        filter: 'agSetColumnFilter',
                         cellEditor: 'agSelectCellEditor',
                         cellEditorParams: {
                             values: ['current-price', 'current-term', 'monthly', 'no-renew', 'renew', 'revised']
-                        }
+                        },
+                        width: 180
                     },
                     {
-                        headerName: 'Secondary Auto Renew type', field: 'secondaryAuto', cellClassRules: this.renewTypeClassRules, cellRenderer: this.renewTypeRenderer, cellEditor: 'agSelectCellEditor',
+                        headerName: 'Secondary Auto Renew type',
+                        field: 'secondaryAuto',
+                        cellClassRules: this.renewTypeClassRules,
+                        cellRenderer: this.renewTypeRenderer,
+                        cellEditor: 'agSelectCellEditor',
+                        filter: 'agSetColumnFilter',
                         cellEditorParams: {
                             values: ['current-price', 'current-term', 'monthly', 'no-renew', 'renew', 'revised']
                         }
                     },
-                    { headerName: 'Utility', field: 'utility' },
-                    { headerName: 'previous Price', field: 'previousPrice' },
-                    { headerName: 'Basic Services Prices', field: 'basicServicePrice' },
-                    { headerName: 'Basic Services Prices to', field: 'basicServicePriceTo' },
-                    { headerName: 'Schedule', field: 'schedule' },
-                    { headerName: 'Price (c/kWh)', field: 'priceKwh.perKWh' },
-                    { headerName: 'Rate Code', field: 'rateCode' },
-                    { headerName: 'ETF ($)', field: 'etf' },
+                    { headerName: 'Utility', field: 'utility', headerClass: 'header-center' },
+                    { headerName: 'previous Price', field: 'previousPrice', width: 120 },
+                    { headerName: 'Basic Services Prices', field: 'basicServicePrice', width: 150 },
+                    { headerName: 'Basic Services Prices to', field: 'basicServicePriceTo', width: 185 },
+                    { headerName: 'Schedule', field: 'schedule', headerClass: 'header-center' },
+                    { headerName: 'Price (c/kWh)', field: 'priceKwh.perKWh', width: 120 },
+                    { headerName: 'Rate Code', field: 'rateCode', headerClass: 'header-center' },
+                    { headerName: 'ETF ($)', field: 'etf', headerClass: 'header-center' },
                     {
                         headerName: 'Cancellation Type', field: 'cancellationType', cellEditor: 'agSelectCellEditor',
                         cellEditorParams: {
                             values: ['no -cancellation-fee', 'cancellation fee']
                         }
                     },
-
                 ]
             },
             {
-                headerName: 'Aquisition Margins', children: [
-                    { headerName: 'Margin ($/MWh)', field: 'acqtMrgnMarginMwh' },
-                    { headerName: 'COP', field: 'acqtMrgnCop' },
+                headerName: 'Acquisition Margins', headerClass: 'group-header', children: [
+                    { headerName: 'Margin ($/MWh)', field: 'acqtMrgnMarginMwh', width: 130, headerClass: 'red' },
+                    { headerName: 'COP', field: 'acqtMrgnCop', width: 90, headerClass: 'red header-center'},
                 ],
                 cellClass: 'aquisition-margins-group'
             },
             {
-                headerName: 'Web CH', children: [
-                    { headerName: 'AQ', field: 'webChnlAQ', width: 100 },
-                    { headerName: 'RL', field: 'webChnlRL', width: 100 },
+                headerName: 'Web CH.', headerClass: 'group-header', children: [
+                    { headerName: 'AQ', field: 'webChnlAQ', width: 80, headerClass: 'pink header-center', cellRenderer: this.checkboxRenderer },
+                    { headerName: 'RL', field: 'webChnlRL', width: 80, headerClass: 'pink header-center', cellRenderer: this.checkboxRenderer },
                 ], cellClass: 'web-group'
             },
             {
-                headerName: 'IBTM CH', children: [
-                    { headerName: 'AQ', field: 'ibtmChnlAQ', width: 100 },
-                    { headerName: 'RL', field: 'ibtmChnlRT', width: 100 },
-                    { headerName: 'RT', field: 'ibtmChnlRL', width: 100 }
+                headerName: 'IBTM CH.', headerClass: 'group-header', children: [
+                    { headerName: 'AQ', field: 'ibtmChnlAQ', width: 80, headerClass: 'light-pink header-center', cellRenderer: this.checkboxRenderer },
+                    { headerName: 'RL', field: 'ibtmChnlRT', width: 80, headerClass: 'light-pink header-center', cellRenderer: this.checkboxRenderer },
+                    { headerName: 'RT', field: 'ibtmChnlRL', width: 80, headerClass: 'light-pink header-center', cellRenderer: this.checkboxRenderer }
                 ], cellClass: 'ibtm-group'
             }
-
-
         ]
     };
 
@@ -289,8 +126,7 @@ export class AepTable {
         this.gridOptions['api'].sizeColumnsToFit();
         this.gridOptions['api'].setRowData(this.content);
     }
-
     render() {
-        return <div id="myGrid" class="ag-theme-balham"></div>
+        return <div id="myGrid" class="gag-theme-balham"></div>
     }
 }
